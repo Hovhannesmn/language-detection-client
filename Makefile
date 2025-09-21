@@ -215,10 +215,6 @@ docker-build: ## Build Docker image
 	@docker build -t $(BINARY_NAME) .
 	@echo "$(GREEN)Docker image built: $(BINARY_NAME)$(NC)"
 
-docker-build-dev: ## Build development Docker image
-	@echo "$(BLUE)Building development Docker image...$(NC)"
-	@docker build -f Dockerfile.dev -t $(BINARY_NAME)-dev .
-	@echo "$(GREEN)Development Docker image built: $(BINARY_NAME)-dev$(NC)"
 
 docker-run: ## Run in Docker container
 	@echo "$(BLUE)Running in Docker...$(NC)"
@@ -236,9 +232,6 @@ docker-compose-test: ## Run tests with docker-compose
 	@echo "$(BLUE)Running tests with docker-compose...$(NC)"
 	@docker-compose --profile test up --build --abort-on-container-exit
 
-docker-compose-dev: ## Start development environment with docker-compose
-	@echo "$(BLUE)Starting development environment...$(NC)"
-	@docker-compose --profile dev up --build
 
 docker-compose-interactive: ## Start interactive client with docker-compose
 	@echo "$(BLUE)Starting interactive client...$(NC)"
