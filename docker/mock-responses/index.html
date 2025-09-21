@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Detection Service</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .status {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+            border: 1px solid #c3e6cb;
+        }
+        .endpoint {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+            border-left: 4px solid #007bff;
+        }
+        .method {
+            font-weight: bold;
+            color: #007bff;
+        }
+        code {
+            background: #e9ecef;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌐 Language Detection Service</h1>
+        
+        <div class="status">
+            <strong>✅ Service Status:</strong> Healthy and Running
+        </div>
+        
+        <h2>Available Endpoints</h2>
+        
+        <div class="endpoint">
+            <div class="method">GET /health</div>
+            <p>Health check endpoint</p>
+            <code>curl http://localhost:6011/health</code>
+        </div>
+        
+        <div class="endpoint">
+            <div class="method">POST /api/v1/detect</div>
+            <p>Language detection endpoint (Mock)</p>
+            <code>curl -X POST http://localhost:6011/api/v1/detect</code>
+        </div>
+        
+        <h2>Mock Response</h2>
+        <p>The service returns a mock response for testing:</p>
+        <pre style="background: #f8f9fa; padding: 15px; border-radius: 4px; overflow-x: auto;">
+{
+  "language_code": "en-US",
+  "confidence": 0.95
+}</pre>
+        
+        <h2>Integration</h2>
+        <p>This mock service is designed to work with the Language Detection Client. 
+           The client will connect to this service for language validation.</p>
+    </div>
+</body>
+</html>

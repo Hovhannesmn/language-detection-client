@@ -1,0 +1,102 @@
+version: '3.8'
+
+services:
+  # Language Detection Service (Mock)
+  language-detection-service:
+    image: nginx:alpine
+    container_name: ld-service
+    ports:
+      - "6012:80"
+    volumes:
+      - ./docker/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./docker/mock-responses:/usr/share/nginx/html:ro
+    networks:
+      - language-detection-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  # Language Detection Client
+  language-detection-client:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ld-client
+    depends_on:
+      language-detection-service:
+        condition: service_healthy
+    volumes:
+      - ./test-captions:/app/test-captions:ro
+      - ./output:/app/output
+    networks:
+      - language-detection-network
+    environment:
+      - LANGUAGE_SERVICE_URL=http://language-detection-service:80
+    # Override default command to run tests
+    command: >
+      sh -c "
+        echo 'Testing with sample captions...' &&
+        ./language-detection-client 
+          -t_start=00:00:00 
+          -t_end=00:00:20 
+          -coverage=80 
+          -server=language-detection-service:80 
+          test-captions/sample.srt
+      "
+    profiles:
+      - test
+
+  # Language Detection Client - Interactive mode
+  language-detection-client-interactive:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ld-client-interactive
+    depends_on:
+      language-detection-service:
+        condition: service_healthy
+    volumes:
+      - ./test-captions:/app/test-captions:ro
+      - ./output:/app/output
+    networks:
+      - language-detection-network
+    environment:
+      - LANGUAGE_SERVICE_URL=http://language-detection-service:80
+    # Keep container running for interactive use
+    command: ["tail", "-f", "/dev/null"]
+    profiles:
+      - interactive
+
+  # Development environment with live reload
+  language-detection-client-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: ld-client-dev
+    depends_on:
+      language-detection-service:
+        condition: service_healthy
+    volumes:
+      - .:/app
+      - /app/vendor
+      - ./test-captions:/app/test-captions:ro
+      - ./output:/app/output
+    networks:
+      - language-detection-network
+    environment:
+      - LANGUAGE_SERVICE_URL=http://language-detection-service:80
+      - CGO_ENABLED=0
+    command: ["go", "run", "./cmd/client/main.go", "-h"]
+    profiles:
+      - dev
+
+networks:
+  language-detection-network:
+    driver: bridge
+
+volumes:
+  output:
+    driver: local

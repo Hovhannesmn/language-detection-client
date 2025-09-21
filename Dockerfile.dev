@@ -1,0 +1,36 @@
+# Development Dockerfile with live reload
+FROM golang:1.24.2-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Install development dependencies
+RUN apk add --no-cache git ca-certificates tzdata make
+
+# Install air for live reloading
+RUN go install github.com/cosmtrek/air@latest
+
+# Copy go mod files
+COPY go.mod go.sum ./
+
+# Download dependencies
+RUN go mod download
+
+# Copy source code
+COPY . .
+
+# Create non-root user
+RUN addgroup -g 1001 -S appgroup && \
+    adduser -u 1001 -S appuser -G appgroup
+
+# Change ownership
+RUN chown -R appuser:appgroup /app
+
+# Switch to non-root user
+USER appuser
+
+# Expose port for development server
+EXPOSE 8080
+
+# Default command for development
+CMD ["air", "-c", ".air.toml"]

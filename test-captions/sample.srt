@@ -1,0 +1,19 @@
+1
+00:00:01,000 --> 00:00:04,000
+Welcome to our presentation today.
+
+2
+00:00:05,000 --> 00:00:08,000
+We will be discussing language detection technology.
+
+3
+00:00:09,000 --> 00:00:12,000
+This system can identify the language of text content.
+
+4
+00:00:13,000 --> 00:00:16,000
+It supports multiple languages including English.
+
+5
+00:00:17,000 --> 00:00:20,000
+Thank you for your attention.

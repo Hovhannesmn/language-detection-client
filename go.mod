@@ -1,0 +1,27 @@
+module language-detection-client
+
+go 1.24.2
+
+require (
+	github.com/golang/mock v1.6.0
+	github.com/stretchr/testify v1.11.1
+	go.uber.org/mock v0.6.0
+	google.golang.org/grpc v1.75.1
+)
+
+require (
+	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/pmezard/go-difflib v1.0.0 // indirect
+	google.golang.org/protobuf v1.36.9 // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
+)
+
+require (
+	github.com/hovman/ld-proto v0.0.0-20250908214217-97024824d090
+	golang.org/x/net v0.44.0 // indirect
+	golang.org/x/sys v0.36.0 // indirect
+	golang.org/x/text v0.29.0 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20250908214217-97024824d090 // indirect
+)
+
+replace github.com/hovman/ld-proto => ../language-detection-service/ld-proto
