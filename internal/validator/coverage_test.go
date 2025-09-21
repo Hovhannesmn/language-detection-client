@@ -140,7 +140,8 @@ func TestCoverageValidator_Validate(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			result := validator.Validate(tt.captions, tt.config)
+			result, err := validator.Validate(tt.captions, tt.config)
+			assert.NoError(t, err)
 
 			if tt.expectedErrors == 0 {
 				assert.False(t, result.HasErrors)
@@ -148,7 +149,7 @@ func TestCoverageValidator_Validate(t *testing.T) {
 			} else {
 				assert.True(t, result.HasErrors)
 				assert.Len(t, result.Errors, tt.expectedErrors)
-				
+
 				for i, expectedType := range tt.expectedTypes {
 					assert.Equal(t, expectedType, result.Errors[i].Type)
 					assert.NotEmpty(t, result.Errors[i].Details)
