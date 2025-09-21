@@ -126,20 +126,32 @@ run-time-test: build create-test-file ## Run with custom time range
 	@echo "$(BLUE)Running with custom time range...$(NC)"
 	@$(BUILD_DIR)/$(BINARY_NAME) -t_start=00:00:05 -t_end=00:00:15 -coverage=70 -server=$(SERVER_ADDR) $(TEST_CAPTIONS_FILE)
 
-# Custom run with parameters
-run: build ## Run with custom parameters (usage: make run FILE=path/to/file.srt START=00:00:01 END=00:00:10 COVERAGE=80 SERVER=localhost:6011)
-	@if [ -z "$(FILE)" ]; then \
-		echo "$(RED)Error: FILE parameter is required$(NC)"; \
-		echo "Usage: make run FILE=test-captions/sample.srt START=00:00:01 END=00:00:10 COVERAGE=80 SERVER=localhost:6011"; \
+# Docker-based run with parameters
+run: ## Run client with configurable parameters (FILE, START, END, COVERAGE, SERVER)
+	@echo "$(BLUE)Running language detection client...$(NC)"
+	@echo "$(YELLOW)Parameters:$(NC)"
+	@echo "  FILE: $(FILE)"
+	@echo "  START: $(START)"
+	@echo "  END: $(END)"
+	@echo "  COVERAGE: $(COVERAGE)"
+	@echo "  SERVER: $(SERVER)"
+	@echo ""
+	@if [ -n "$(FILE)" ] && [ ! -f "$(FILE)" ]; then \
+		echo "$(RED)Error: File $(FILE) not found$(NC)"; \
 		exit 1; \
 	fi
-	@echo "$(BLUE)Running with custom parameters...$(NC)"
-	@$(BUILD_DIR)/$(BINARY_NAME) \
-		-t_start=$(or $(START),00:00:00) \
-		-t_end=$(or $(END),00:00:00) \
-		-coverage=$(or $(COVERAGE),80) \
-		-server=$(or $(SERVER),$(SERVER_ADDR)) \
-		$(FILE)
+	@echo "version: '3.8'" > docker-compose.override.yml
+	@echo "services:" >> docker-compose.override.yml
+	@echo "  language-detection-client:" >> docker-compose.override.yml
+	@echo "    command: >" >> docker-compose.override.yml
+	@echo "      ./language-detection-client" >> docker-compose.override.yml
+	@echo "      -server=$(SERVER)" >> docker-compose.override.yml
+	@echo "      -t_start=$(START)" >> docker-compose.override.yml
+	@echo "      -t_end=$(END)" >> docker-compose.override.yml
+	@echo "      -coverage=$(COVERAGE)" >> docker-compose.override.yml
+	@echo "      /app/$(FILE)" >> docker-compose.override.yml
+	@SERVER=$(SERVER) START=$(START) END=$(END) COVERAGE=$(COVERAGE) docker-compose up --build
+	@rm -f docker-compose.override.yml
 
 # Utility targets
 create-test-file: ## Create a test captions file
@@ -188,11 +200,12 @@ docker-run: ## Run in Docker container
 	@echo "$(BLUE)Running in Docker...$(NC)"
 	@docker run --rm $(BINARY_NAME) -h
 
-docker-compose-up: ## Start all services with docker-compose
-	@echo "$(BLUE)Starting services with docker-compose...$(NC)"
+
+docker-compose-up: ## Start client with docker-compose
+	@echo "$(BLUE)Starting language detection client with docker-compose...$(NC)"
 	@docker-compose up --build
 
-docker-compose-down: ## Stop all services with docker-compose
+docker-compose-down: ## Stop client with docker-compose
 	@echo "$(BLUE)Stopping services with docker-compose...$(NC)"
 	@docker-compose down
 
