@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  language-detection-client:
+    container_name: language-detection-client
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      # Configurable parameters via environment variables
+      - SERVER=${SERVER:-localhost:6011}
+      - START_TIME=${START:-00:00:00}
+      - END_TIME=${END:-00:00:00}
+      - COVERAGE=${COVERAGE:-80}
+    volumes:
+      # Mount caption files directory
+      - ./test-captions:/app/test-captions:ro
+    command: ["./language-detection-client", "-server=localhost:6011", "-t_start=00:00:01", "-t_end=00:00:15", "-coverage=80", "/app/test-captions/sample.srt"]
+    restart: "no"
