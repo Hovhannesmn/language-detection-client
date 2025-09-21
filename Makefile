@@ -28,26 +28,6 @@ build: ## Build the application
 	@go build $(BUILD_FLAGS) -o $(BUILD_DIR)/$(BINARY_NAME) $(MAIN_PATH)
 	@echo "$(GREEN)Build completed: $(BUILD_DIR)/$(BINARY_NAME)$(NC)"
 
-build-linux: ## Build for Linux
-	@echo "$(BLUE)Building for Linux...$(NC)"
-	@mkdir -p $(BUILD_DIR)
-	@GOOS=linux GOARCH=amd64 go build $(BUILD_FLAGS) -o $(BUILD_DIR)/$(BINARY_NAME)-linux $(MAIN_PATH)
-	@echo "$(GREEN)Linux build completed: $(BUILD_DIR)/$(BINARY_NAME)-linux$(NC)"
-
-build-windows: ## Build for Windows
-	@echo "$(BLUE)Building for Windows...$(NC)"
-	@mkdir -p $(BUILD_DIR)
-	@GOOS=windows GOARCH=amd64 go build $(BUILD_FLAGS) -o $(BUILD_DIR)/$(BINARY_NAME)-windows.exe $(MAIN_PATH)
-	@echo "$(GREEN)Windows build completed: $(BUILD_DIR)/$(BINARY_NAME)-windows.exe$(NC)"
-
-build-darwin: ## Build for macOS
-	@echo "$(BLUE)Building for macOS...$(NC)"
-	@mkdir -p $(BUILD_DIR)
-	@GOOS=darwin GOARCH=amd64 go build $(BUILD_FLAGS) -o $(BUILD_DIR)/$(BINARY_NAME)-darwin $(MAIN_PATH)
-	@echo "$(GREEN)macOS build completed: $(BUILD_DIR)/$(BINARY_NAME)-darwin$(NC)"
-
-build-all: build-linux build-windows build-darwin ## Build for all platforms
-
 # Development targets
 dev: build ## Build and run in development mode
 	@echo "$(BLUE)Running in development mode...$(NC)"
@@ -60,12 +40,6 @@ install: ## Install dependencies
 	@echo "$(GREEN)Dependencies installed$(NC)"
 
 deps: install ## Alias for install
-
-# Code quality targets
-fmt: ## Format Go code
-	@echo "$(BLUE)Formatting code...$(NC)"
-	@go fmt ./...
-	@echo "$(GREEN)Code formatted$(NC)"
 
 vet: ## Run go vet
 	@echo "$(BLUE)Running go vet...$(NC)"

@@ -8,7 +8,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 
-	pb "github.com/hovman/ld-proto/pb-service/proto"
+	pb "github.com/Hovhannesmn/ld_proto/pb"
 )
 
 // LanguageDetectionService defines the interface for language detection operations

@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	pb "github.com/hovman/ld-proto/pb-service/proto"
+	pb "github.com/Hovhannesmn/ld_proto/pb"
 	"github.com/stretchr/testify/assert"
 	"language-detection-client/internal/models"
 )

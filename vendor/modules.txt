@@ -1,12 +1,9 @@
+# github.com/Hovhannesmn/ld_proto v1.0.1
+## explicit; go 1.24.0
+github.com/Hovhannesmn/ld_proto/pb
 # github.com/davecgh/go-spew v1.1.1
 ## explicit
 github.com/davecgh/go-spew/spew
-# github.com/golang/mock v1.6.0
-## explicit; go 1.11
-github.com/golang/mock/gomock
-# github.com/hovman/ld-proto v0.0.0-20250908214217-97024824d090 => ../language-detection-service/ld-proto
-## explicit; go 1.24.0
-github.com/hovman/ld-proto/pb-service/proto
 # github.com/pmezard/go-difflib v1.0.0
 ## explicit
 github.com/pmezard/go-difflib/difflib
@@ -137,4 +134,3 @@ google.golang.org/protobuf/types/known/timestamppb
 # gopkg.in/yaml.v3 v3.0.1
 ## explicit
 gopkg.in/yaml.v3
-# github.com/hovman/ld-proto => ../language-detection-service/ld-proto
