@@ -21,12 +21,6 @@ NC=\033[0m # No Color
 
 .PHONY: help build clean run run-test test lint fmt vet tidy deps install dev build-linux build-windows build-darwin
 
-# Default target
-help: ## Show this help message
-	@echo "$(BLUE)Language Detection Client - Available targets:$(NC)"
-	@echo ""
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  $(GREEN)%-20s$(NC) %s\n", $$1, $$2}'
-
 # Build targets
 build: ## Build the application
 	@echo "$(BLUE)Building $(BINARY_NAME)...$(NC)"
@@ -162,7 +156,7 @@ run-time-test: build create-test-file ## Run with custom time range
 run: build ## Run with custom parameters (usage: make run FILE=path/to/file.srt START=00:00:01 END=00:00:10 COVERAGE=80 SERVER=localhost:6011)
 	@if [ -z "$(FILE)" ]; then \
 		echo "$(RED)Error: FILE parameter is required$(NC)"; \
-		echo "Usage: make run FILE=path/to/file.srt START=00:00:01 END=00:00:10 COVERAGE=80 SERVER=localhost:6011"; \
+		echo "Usage: make run FILE=test-captions/sample.srt START=00:00:01 END=00:00:10 COVERAGE=80 SERVER=localhost:6011"; \
 		exit 1; \
 	fi
 	@echo "$(BLUE)Running with custom parameters...$(NC)"

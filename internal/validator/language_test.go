@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
+	pb "github.com/hovman/ld-proto/pb-service/proto"
 	"github.com/stretchr/testify/assert"
 	"language-detection-client/internal/models"
-	pb "github.com/hovman/ld-proto/pb-service/proto"
 )
 
 // MockLanguageDetectionService is a mock for the LanguageDetectionService interface
@@ -89,7 +89,7 @@ func TestLanguageValidator_Validate(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			// Create a mock service
 			mockService := NewMockLanguageDetectionService()
-			
+
 			// Create validator with mock service
 			validator := &LanguageValidator{
 				client: mockService,
@@ -184,15 +184,4 @@ func TestLanguageValidator_Close(t *testing.T) {
 
 	err := validator.Close()
 	assert.NoError(t, err)
-}
-
-// Integration test that would work with a real service
-func TestLanguageValidator_Integration(t *testing.T) {
-	if testing.Short() {
-		t.Skip("Skipping integration test")
-	}
-
-	// This test would require a running language detection service
-	// For now, we'll skip it in the test suite
-	t.Skip("Integration test requires running language detection service")
 }
