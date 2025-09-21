@@ -21,14 +21,14 @@ func NewLanguageValidator(serverAddr string) (*LanguageValidator, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to create language detection client: %w", err)
 	}
-	
+
 	return &LanguageValidator{
 		client: client,
 	}, nil
 }
 
 // Validate checks if the detected language is acceptable (en-US)
-func (lv *LanguageValidator) Validate(captions []models.Caption, config models.Config) models.ValidationResult {
+func (lv *LanguageValidator) Validate(captions []models.Caption, config models.Config) (models.ValidationResult, error) {
 	result := models.ValidationResult{
 		HasErrors: false,
 		Errors:    []models.ValidationError{},
@@ -38,7 +38,7 @@ func (lv *LanguageValidator) Validate(captions []models.Caption, config models.C
 	text := collectText(captions)
 	if strings.TrimSpace(text) == "" {
 		// No text to validate
-		return result
+		return result, nil
 	}
 
 	// Create context with timeout
@@ -48,14 +48,7 @@ func (lv *LanguageValidator) Validate(captions []models.Caption, config models.C
 	// Send text to language detection service
 	response, err := lv.client.DetectLanguage(ctx, text)
 	if err != nil {
-		// If language detection fails, we can't validate the language
-		// This is a validation error, not a program error
-		result.HasErrors = true
-		result.Errors = append(result.Errors, models.ValidationError{
-			Type:    "incorrect_language",
-			Details: fmt.Sprintf("Language detection failed: %v", err),
-		})
-		return result
+		return result, err
 	}
 
 	// Check if language is acceptable (en-US)
@@ -70,7 +63,7 @@ func (lv *LanguageValidator) Validate(captions []models.Caption, config models.C
 		})
 	}
 
-	return result
+	return result, nil
 }
 
 // Close closes the language detection client

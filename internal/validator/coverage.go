@@ -14,7 +14,7 @@ func NewCoverageValidator() *CoverageValidator {
 	return &CoverageValidator{}
 }
 
-func (cv *CoverageValidator) Validate(captions []models.Caption, config models.Config) models.ValidationResult {
+func (cv *CoverageValidator) Validate(captions []models.Caption, config models.Config) (models.ValidationResult, error) {
 	result := models.ValidationResult{
 		HasErrors: false,
 		Errors:    []models.ValidationError{},
@@ -28,7 +28,7 @@ func (cv *CoverageValidator) Validate(captions []models.Caption, config models.C
 			Type:    "invalid_time_range",
 			Details: "End time must be after start time",
 		})
-		return result
+		return result, nil
 	}
 
 	// Calculate covered duration
@@ -44,7 +44,7 @@ func (cv *CoverageValidator) Validate(captions []models.Caption, config models.C
 		})
 	}
 
-	return result
+	return result, nil
 }
 
 // calculateCoverage calculates the total covered duration within the specified time range
@@ -66,10 +66,9 @@ func calculateCoverage(captions []models.Caption, start, end time.Duration) time
 
 // formatCoverageError formats the coverage error message
 func formatCoverageError(actual, required float64, totalDuration, covered time.Duration) string {
-	return fmt.Sprintf("Coverage %.1f%% (%.1fs of %.1fs) is below required %.1f%%. Add more captions or extend existing caption durations to meet coverage requirement.", 
+	return fmt.Sprintf("Coverage %.1f%% (%.1fs of %.1fs) is below required %.1f%%. Add more captions or extend existing caption durations to meet coverage requirement.",
 		actual, covered.Seconds(), totalDuration.Seconds(), required)
 }
-
 
 // maxDuration returns the maximum of two durations
 func maxDuration(a, b time.Duration) time.Duration {

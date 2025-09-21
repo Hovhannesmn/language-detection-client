@@ -143,13 +143,13 @@ run: ## Run client with configurable parameters (FILE, START, END, COVERAGE, SER
 	@echo "version: '3.8'" > docker-compose.override.yml
 	@echo "services:" >> docker-compose.override.yml
 	@echo "  language-detection-client:" >> docker-compose.override.yml
-	@echo "    command: >" >> docker-compose.override.yml
-	@echo "      ./language-detection-client" >> docker-compose.override.yml
-	@echo "      -server=$(SERVER)" >> docker-compose.override.yml
-	@echo "      -t_start=$(START)" >> docker-compose.override.yml
-	@echo "      -t_end=$(END)" >> docker-compose.override.yml
-	@echo "      -coverage=$(COVERAGE)" >> docker-compose.override.yml
-	@echo "      /app/$(FILE)" >> docker-compose.override.yml
+	@echo "    command:" >> docker-compose.override.yml
+	@echo "      - \"./language-detection-client\"" >> docker-compose.override.yml
+	@echo "      - \"-server=host.docker.internal:6011\"" >> docker-compose.override.yml
+	@echo "      - \"-t_start=$(START)\"" >> docker-compose.override.yml
+	@echo "      - \"-t_end=$(END)\"" >> docker-compose.override.yml
+	@echo "      - \"-coverage=$(COVERAGE)\"" >> docker-compose.override.yml
+	@echo "      - \"/app/$(FILE)\"" >> docker-compose.override.yml
 	@SERVER=$(SERVER) START=$(START) END=$(END) COVERAGE=$(COVERAGE) docker-compose up --build
 	@rm -f docker-compose.override.yml
 

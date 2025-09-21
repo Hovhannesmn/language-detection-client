@@ -6,7 +6,7 @@ import (
 
 // Validator interface for different types of validation
 type Validator interface {
-	Validate(captions []models.Caption, config models.Config) models.ValidationResult
+	Validate(captions []models.Caption, config models.Config) (models.ValidationResult, error)
 }
 
 // ClosableValidator interface for validators that need cleanup
@@ -17,7 +17,7 @@ type ClosableValidator interface {
 
 // CaptionValidator orchestrates all validation processes
 type CaptionValidator struct {
-	validators []Validator
+	validators         []Validator
 	closableValidators []ClosableValidator
 }
 
@@ -39,8 +39,7 @@ func NewCaptionValidator(serverAddr string) (*CaptionValidator, error) {
 	}, nil
 }
 
-
-func (cv *CaptionValidator) Validate(captions []models.Caption, config models.Config) models.ValidationResult {
+func (cv *CaptionValidator) Validate(captions []models.Caption, config models.Config) (models.ValidationResult, error) {
 	result := models.ValidationResult{
 		HasErrors: false,
 		Errors:    []models.ValidationError{},
@@ -48,7 +47,10 @@ func (cv *CaptionValidator) Validate(captions []models.Caption, config models.Co
 
 	// Run all validators
 	for _, validator := range cv.validators {
-		validatorResult := validator.Validate(captions, config)
+		validatorResult, err := validator.Validate(captions, config)
+		if err != nil {
+			return result, err
+		}
 
 		// Combine results
 		if validatorResult.HasErrors {
@@ -57,7 +59,7 @@ func (cv *CaptionValidator) Validate(captions []models.Caption, config models.Co
 		}
 	}
 
-	return result
+	return result, nil
 }
 
 // Close closes all closable validators
@@ -79,5 +81,5 @@ func RunValidations(captions []models.Caption, cfg *models.Config) (models.Valid
 	}
 	defer captionValidator.Close()
 
-	return captionValidator.Validate(captions, *cfg), nil
+	return captionValidator.Validate(captions, *cfg)
 }
