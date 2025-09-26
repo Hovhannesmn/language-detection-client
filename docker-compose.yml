@@ -15,5 +15,5 @@ services:
     volumes:
       # Mount caption files directory
       - ./test-captions:/app/test-captions:ro
-    command: ["./language-detection-client", "-server=host.docker.internal:6011", "-t_start=00:00:01", "-t_end=00:00:15", "-coverage=80", "/app/test-captions/sample.srt"]
+    command: ["-server=host.docker.internal:6011", "-t_start=00:00:01", "-t_end=00:00:15", "-coverage=80", "/app/test-captions/sample.srt"]
     restart: "no"

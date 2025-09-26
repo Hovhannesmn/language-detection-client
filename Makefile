@@ -144,7 +144,6 @@ run: ## Run client with configurable parameters (FILE, START, END, COVERAGE, SER
 	@echo "services:" >> docker-compose.override.yml
 	@echo "  language-detection-client:" >> docker-compose.override.yml
 	@echo "    command:" >> docker-compose.override.yml
-	@echo "      - \"./language-detection-client\"" >> docker-compose.override.yml
 	@echo "      - \"-server=host.docker.internal:6011\"" >> docker-compose.override.yml
 	@echo "      - \"-t_start=$(START)\"" >> docker-compose.override.yml
 	@echo "      - \"-t_end=$(END)\"" >> docker-compose.override.yml

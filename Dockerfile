@@ -46,5 +46,8 @@ USER appuser
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD ./language-detection-client -h >/dev/null 2>&1 || exit 1
 
-# Default command (can be overridden)
-CMD ["./language-detection-client", "-h"]
+# Set the entry point (fixed binary)
+ENTRYPOINT ["./language-detection-client"]
+
+# Set default arguments (can be overridden)
+CMD ["-h"]
